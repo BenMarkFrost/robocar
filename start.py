@@ -1,5 +1,6 @@
 import serial
 import time
+import ImageAnalysis
 
 ser = serial.Serial('/dev/ttyACM0', 9600, timeout=5)
 
@@ -14,8 +15,10 @@ def send(message):
     print(input_string)
     
     
-while True:
-    print(send("fwd"))
+imageAnalysis = ImageAnalysis.ImageAnalysis()
+
+# while True:
+#     print(send("fwd"))
     
-    time.sleep(5)
+#     time.sleep(5)
     
