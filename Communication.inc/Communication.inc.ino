@@ -25,11 +25,48 @@ void setup() {
 
 }
 
+void turnLeft(){
+  digitalWrite(IN3, LOW);      
+  digitalWrite(IN4, HIGH);//Right wheel turning forwards
+  delay(200);
+  digitalWrite(IN3, LOW);      
+  digitalWrite(IN4, LOW); //Right wheel stopped
+}
+
+void turnRight(){
+  digitalWrite(IN1, HIGH);      
+  digitalWrite(IN2, LOW); //Left wheel turning forwards
+  delay(200);             //delay 500ms
+  digitalWrite(IN1, LOW);      
+  digitalWrite(IN2, LOW); //Left wheel stoped
+}
+
+void moveForward(){
+  digitalWrite(IN1, HIGH);      
+  digitalWrite(IN2, LOW); 
+  digitalWrite(IN3, LOW);      
+  digitalWrite(IN4, HIGH);  //go forward
+  delay(200);
+  digitalWrite(IN1, LOW);      
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);      
+  digitalWrite(IN4, LOW);   //stop
+}
+
 void loop() {
   // put your main code here, to run repeatedly:
 
   if (stringComplete) {
-    sendMessage();
+
+    inputString = inputString.substring(0,3);
+    
+    if (inputString == "fwd"){
+      sendMessage("moving forward");
+      moveForward();
+    } else{
+      sendMessage("no command");
+    }
+
     stringComplete = false;
     inputString = "";
   }
@@ -40,9 +77,9 @@ void loop() {
 
 }
 
-void sendMessage(){
+void sendMessage(String message){
   char buffer[50];
-  sprintf(buffer, "Hello there");
+  sprintf(buffer, message.c_str());
   Serial.println(buffer);
 }
 
