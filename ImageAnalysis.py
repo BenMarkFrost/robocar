@@ -11,16 +11,19 @@ class ImageAnalysis:
         os.system("libcamera-vid -t 1")
         time.sleep(1)
         
+        self.position = "center"
+
         self.camera = cv2.VideoCapture(-1)
         self.face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-        #self.thread = threading.Thread(target=self.start)
-        #self.thread.start()
+        self.thread = threading.Thread(target=self.start)
+        self.thread.start()
         self.start()
 
+    def getPosition(self):
+        return self.position
+
     def start(self):
-        
-        
         
         while True:
             ret, frame = self.camera.read()
@@ -51,9 +54,12 @@ class ImageAnalysis:
 
                 if leftBound > (biggestFace[1][0] + (biggestFace[2][0]/2)):
                     print("Left" + np.random.randint(0, 100).__str__())
+                    self.position = "left"
                 elif rightBound < (biggestFace[1][0] + (biggestFace[2][0]/2)):
                     print("Right" + np.random.randint(0, 100).__str__())
-
+                    self.positoin = "right"
+                else:
+                    self.position = "center"
 
             cv2.imshow('frame', frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
