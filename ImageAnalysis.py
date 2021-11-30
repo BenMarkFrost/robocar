@@ -18,12 +18,14 @@ class ImageAnalysis:
 
         self.thread = threading.Thread(target=self.start)
         self.thread.start()
-        self.start()
+        #self.start()
 
     def getPosition(self):
-        return self.position
+        pos = self.position
+        self.position = "center"
+        return pos
 
-    def change_brightness(self, img, value=30):
+    def change_brightness(self, img, value=50):
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         h, s, v = cv2.split(hsv)
         v = cv2.add(v,value)
@@ -63,15 +65,15 @@ class ImageAnalysis:
 
             cv2.rectangle(frame, (leftBound, -10), (rightBound, int(frame.shape[0]+10)), (0, 0, 255), 2)
 
-            if biggestFace[0] > 200:
+            if biggestFace[0] > 600:
                 cv2.rectangle(frame, biggestFace[1], (biggestFace[1][0] + biggestFace[2][0], biggestFace[1][1] + biggestFace[2][1]), (0, 255, 0), 2)
 
                 if leftBound > (biggestFace[1][0] + (biggestFace[2][0]/2)):
-                    print("Left" + np.random.randint(0, 100).__str__())
+                    #print("Left" + np.random.randint(0, 100).__str__())
                     self.position = "left"
                 elif rightBound < (biggestFace[1][0] + (biggestFace[2][0]/2)):
-                    print("Right" + np.random.randint(0, 100).__str__())
-                    self.positoin = "right"
+                    #print("Right" + np.random.randint(0, 100).__str__())
+                    self.position = "right"
                 else:
                     self.position = "center"
 

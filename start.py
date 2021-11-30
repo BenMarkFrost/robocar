@@ -20,12 +20,17 @@ imageAnalysis = ImageAnalysis.ImageAnalysis()
 
 while True:
 
-    if imageAnalysis.getPosition == "right":
-        send("right")
-    elif imageAnalysis.getPosition == "left":
-        send("left")
-        
+    result = imageAnalysis.getPosition()
 
+    print(result)
+
+    if result == "right":
+        send("rgt")
+    elif result == "left":
+        send("lft")
+    
+    time.sleep(0.2)
+    
     # print(send("fwd"))
     
     # time.sleep(1)
