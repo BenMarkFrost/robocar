@@ -23,14 +23,28 @@ class ImageAnalysis:
     def getPosition(self):
         return self.position
 
+    def change_brightness(self, img, value=30):
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        h, s, v = cv2.split(hsv)
+        v = cv2.add(v,value)
+        v[v > 255] = 255
+        v[v < 0] = 0
+        final_hsv = cv2.merge((h, s, v))
+        img = cv2.cvtColor(final_hsv, cv2.COLOR_HSV2BGR)
+        return img
+
     def start(self):
         
         while True:
             ret, frame = self.camera.read()
 
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            
+            frame = self.change_brightness(frame, value=30)
+
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+            gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+            
+            
 
             faces = self.face_cascade.detectMultiScale(gray, 1.1, 4)
 
