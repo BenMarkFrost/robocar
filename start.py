@@ -29,7 +29,7 @@ while True:
     elif result == "left":
         send("lft")
     
-    time.sleep(0.2)
+    time.sleep(0.1)
     
     # print(send("fwd"))
     

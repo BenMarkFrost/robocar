@@ -7,6 +7,7 @@
 
 boolean stringComplete = false;
 String inputString = "";
+int moveTime = 20;
 
 void setup() {
   pinMode(IN1, OUTPUT);   //set IO pin mode OUTPUT
@@ -32,7 +33,7 @@ void turnLeft(){
   digitalWrite(IN1, LOW);      
   digitalWrite(IN2, HIGH); //Left wheel turning backwards
   
-  delay(200);
+  delay(moveTime);
   
   digitalWrite(IN3, LOW);      
   digitalWrite(IN4, LOW); //Right wheel stopped
@@ -48,7 +49,7 @@ void turnRight(){
   digitalWrite(IN3, HIGH);      
   digitalWrite(IN4, LOW);//Right wheel turning backwards
   
-  delay(200);             //delay 200ms
+  delay(moveTime);       
   
   digitalWrite(IN1, LOW);      
   digitalWrite(IN2, LOW); //Left wheel stoped
@@ -62,7 +63,7 @@ void moveForward(){
   digitalWrite(IN2, LOW); 
   digitalWrite(IN3, LOW);      
   digitalWrite(IN4, HIGH);  //go forward
-  delay(200);
+  delay(moveTime);
   digitalWrite(IN1, LOW);      
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, LOW);      
