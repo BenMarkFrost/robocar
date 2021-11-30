@@ -1,21 +1,33 @@
 import cv2
 import numpy as np
 import threading
+import os
+import time
 
 class ImageAnalysis:
     
     def __init__(self):
-        self.camera = cv2.VideoCapture(0)
+        
+        os.system("libcamera-vid -t 1")
+        time.sleep(1)
+        
+        self.camera = cv2.VideoCapture(-1)
         self.face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-        self.thread = threading.Thread(target=self.start)
-        self.thread.start()
+        #self.thread = threading.Thread(target=self.start)
+        #self.thread.start()
+        self.start()
 
     def start(self):
+        
+        
+        
         while True:
             ret, frame = self.camera.read()
 
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             faces = self.face_cascade.detectMultiScale(gray, 1.1, 4)
 

@@ -28,17 +28,33 @@ void setup() {
 void turnLeft(){
   digitalWrite(IN3, LOW);      
   digitalWrite(IN4, HIGH);//Right wheel turning forwards
+  
+  digitalWrite(IN1, LOW);      
+  digitalWrite(IN2, HIGH); //Left wheel turning backwards
+  
   delay(200);
+  
   digitalWrite(IN3, LOW);      
   digitalWrite(IN4, LOW); //Right wheel stopped
+  
+  digitalWrite(IN1, LOW);      
+  digitalWrite(IN2, LOW); //Left wheel stoped
 }
 
 void turnRight(){
   digitalWrite(IN1, HIGH);      
   digitalWrite(IN2, LOW); //Left wheel turning forwards
-  delay(200);             //delay 500ms
+
+  digitalWrite(IN3, HIGH);      
+  digitalWrite(IN4, LOW);//Right wheel turning backwards
+  
+  delay(200);             //delay 200ms
+  
   digitalWrite(IN1, LOW);      
   digitalWrite(IN2, LOW); //Left wheel stoped
+
+  digitalWrite(IN3, LOW);      
+  digitalWrite(IN4, LOW); //Right wheel stopped
 }
 
 void moveForward(){
@@ -63,7 +79,13 @@ void loop() {
     if (inputString == "fwd"){
       sendMessage("moving forward");
       moveForward();
-    } else{
+    } else if (inputString == "rgt"){
+      sendMessage("moving right");
+      turnRight();
+    } else if (inputString == "lft"){
+      sendMessage("moving left");
+      turnLeft();
+    } else {
       sendMessage("no command");
     }
 
