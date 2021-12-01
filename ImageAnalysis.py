@@ -13,12 +13,12 @@ class ImageAnalysis:
         
         self.position = "center"
 
-        self.camera = cv2.VideoCapture(-1)
+        self.camera = cv2.VideoCapture(0)
         self.face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
         self.thread = threading.Thread(target=self.start)
         self.thread.start()
-        #self.start()
+        # self.start()
 
     def getPosition(self):
         pos = self.position
@@ -77,6 +77,7 @@ class ImageAnalysis:
                 else:
                     self.position = "center"
 
+            cv2.putText(frame, self.position, (25, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             cv2.imshow('frame', frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
