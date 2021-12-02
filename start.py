@@ -9,8 +9,9 @@ if input_string:
     print(input_string)
     
     
-def send(message):
-    ser.write((message+"\n").encode())
+def send(message, moveTime):
+    formattedMessage = (f"%s %s" % (message, moveTime))
+    ser.write((formattedMessage+"\n").encode())
     input_string = ser.readline().decode("utf-8").strip()
     print(input_string)
     return input_string
@@ -21,13 +22,17 @@ imageAnalysis = ImageAnalysis.ImageAnalysis()
 while True:
 
     result = imageAnalysis.getPosition()
-
-    print(result)
+    faceSize = imageAnalysis.getFaceSize()
+    #print(result)
+    moveTime = 20
 
     if result == "right":
-        send("rgt")
+        send("rgt", moveTime)
     elif result == "left":
-        send("lft")
+        send("lft", moveTime)
+        
+    #if faceSize < 60000:
+        #send("fwd",40)
     
     time.sleep(0.1)
     

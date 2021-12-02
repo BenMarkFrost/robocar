@@ -7,7 +7,6 @@
 
 boolean stringComplete = false;
 String inputString = "";
-int moveTime = 20;
 
 void setup() {
   pinMode(IN1, OUTPUT);   //set IO pin mode OUTPUT
@@ -26,7 +25,7 @@ void setup() {
 
 }
 
-void turnLeft(){
+void turnLeft(int moveTime){
   digitalWrite(IN3, LOW);      
   digitalWrite(IN4, HIGH);//Right wheel turning forwards
   
@@ -42,7 +41,7 @@ void turnLeft(){
   digitalWrite(IN2, LOW); //Left wheel stoped
 }
 
-void turnRight(){
+void turnRight(int moveTime){
   digitalWrite(IN1, HIGH);      
   digitalWrite(IN2, LOW); //Left wheel turning forwards
 
@@ -58,7 +57,7 @@ void turnRight(){
   digitalWrite(IN4, LOW); //Right wheel stopped
 }
 
-void moveForward(){
+void moveForward(int moveTime){
   digitalWrite(IN1, HIGH);      
   digitalWrite(IN2, LOW); 
   digitalWrite(IN3, LOW);      
@@ -75,17 +74,24 @@ void loop() {
 
   if (stringComplete) {
 
-    inputString = inputString.substring(0,3);
+    String inputDirection = "";
+    int moveTime = 20;
+
+    inputDirection = inputString.substring(0,3);
+
+    moveTime = inputString.substring(3).toInt();
+
+    sendMessage(String(moveTime));
     
-    if (inputString == "fwd"){
+    if (inputDirection == "fwd"){
       sendMessage("moving forward");
-      moveForward();
-    } else if (inputString == "rgt"){
+      moveForward(moveTime);
+    } else if (inputDirection == "rgt"){
       sendMessage("moving right");
-      turnRight();
-    } else if (inputString == "lft"){
+      turnRight(moveTime);
+    } else if (inputDirection == "lft"){
       sendMessage("moving left");
-      turnLeft();
+      turnLeft(moveTime);
     } else {
       sendMessage("no command");
     }

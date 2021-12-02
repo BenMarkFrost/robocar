@@ -11,7 +11,8 @@ class ImageAnalysis:
         os.system("libcamera-vid -t 1")
         time.sleep(1)
         
-        self.position = "center"
+        self.position = "none"
+        self.faceSize = 1000000000
 
         self.camera = cv2.VideoCapture(0)
         self.face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
@@ -22,8 +23,11 @@ class ImageAnalysis:
 
     def getPosition(self):
         pos = self.position
-        self.position = "center"
+        self.position = "none"
         return pos
+    
+    def getFaceSize(self):
+        return self.faceSize
 
     def change_brightness(self, img, value=50):
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -60,12 +64,17 @@ class ImageAnalysis:
                     biggestFace[2] = (w, h)
             
             
-            leftBound = int(frame.shape[1]/3)
-            rightBound = int(frame.shape[1]*2/3)
+            leftBound = int(((frame.shape[1]/2) - frame.shape[1]/8))
+            rightBound = int(((frame.shape[1]/2) + frame.shape[1]/8))
 
             cv2.rectangle(frame, (leftBound, -10), (rightBound, int(frame.shape[0]+10)), (0, 0, 255), 2)
 
-            if biggestFace[0] > 600:
+            
+
+            if biggestFace[0] > 10000:
+                
+                self.faceSize = biggestFace[0]
+                
                 cv2.rectangle(frame, biggestFace[1], (biggestFace[1][0] + biggestFace[2][0], biggestFace[1][1] + biggestFace[2][1]), (0, 255, 0), 2)
 
                 if leftBound > (biggestFace[1][0] + (biggestFace[2][0]/2)):
@@ -76,9 +85,14 @@ class ImageAnalysis:
                     self.position = "right"
                 else:
                     self.position = "center"
+            else:
+                self.postion = "none"
 
             cv2.putText(frame, self.position, (25, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             cv2.imshow('frame', frame)
+            
+            time.sleep(0.1)
+            
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
         self.camera.release()
