@@ -135,8 +135,8 @@ class ImageAnalysis:
             
             
             
-            self.leftBound = int(((frame.shape[1]/2) - frame.shape[1]/20))
-            self.rightBound = int(((frame.shape[1]/2) + frame.shape[1]/20))
+            self.leftBound = int(((frame.shape[1]/2) - frame.shape[1]/12.5))
+            self.rightBound = int(((frame.shape[1]/2) + frame.shape[1]/12.5))
 
             cv2.rectangle(frame, (self.leftBound, -10), (self.rightBound, int(frame.shape[0]+10)), (0, 0, 255), 2)
 
@@ -147,7 +147,10 @@ class ImageAnalysis:
             
 
             cv2.putText(frame, self.position, (25, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-            cv2.imshow('frame', frame)
+            
+            outputFrame = cv2.resize(frame, (1920,1440))
+            
+            cv2.imshow('frame', outputFrame)
             
             # time.sleep(0.1)
             
