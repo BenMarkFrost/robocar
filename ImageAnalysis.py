@@ -44,7 +44,7 @@ class ImageAnalysis:
         while True:
             ret, frame = self.camera.read()
 
-            frame = self.change_brightness(frame, value=30)
+            frame = self.change_brightness(frame, value=100)
 
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
@@ -57,21 +57,21 @@ class ImageAnalysis:
             biggestFace = [0, (0,0), (0,0)]
 
             for (x, y, w, h) in faces:
-                # cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+                cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
                 if w*h > biggestFace[0]:
                     biggestFace[0] = w*h
                     biggestFace[1] = (x, y)
                     biggestFace[2] = (w, h)
             
             
-            leftBound = int(((frame.shape[1]/2) - frame.shape[1]/8))
-            rightBound = int(((frame.shape[1]/2) + frame.shape[1]/8))
+            leftBound = int(((frame.shape[1]/2) - frame.shape[1]/20))
+            rightBound = int(((frame.shape[1]/2) + frame.shape[1]/20))
 
             cv2.rectangle(frame, (leftBound, -10), (rightBound, int(frame.shape[0]+10)), (0, 0, 255), 2)
 
             
 
-            if biggestFace[0] > 10000:
+            if biggestFace[0] > 1000:
                 
                 self.faceSize = biggestFace[0]
                 
