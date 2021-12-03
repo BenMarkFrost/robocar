@@ -3,6 +3,7 @@ import numpy as np
 import threading
 import os
 import time
+from mtcnn.mtcnn import MTCNN
 
 class ImageAnalysis:
     
@@ -16,6 +17,7 @@ class ImageAnalysis:
 
         self.camera = cv2.VideoCapture(0)
         self.face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+        self.detector = MTCNN()
 
         self.thread = threading.Thread(target=self.start)
         self.thread.start()
@@ -44,15 +46,20 @@ class ImageAnalysis:
         while True:
             ret, frame = self.camera.read()
 
-            frame = self.change_brightness(frame, value=100)
+            # frame = self.change_brightness(frame, value=100)
 
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
             
-            
 
-            faces = self.face_cascade.detectMultiScale(gray, 1.1, 4)
+            # faces = self.face_cascade.detectMultiScale(gray, 1.1, 4)
+
+            faces = self.detector.detect_faces(frame)
+
+
+            faces = [el['box'] for el in faces]
+
 
             biggestFace = [0, (0,0), (0,0)]
 
@@ -91,7 +98,7 @@ class ImageAnalysis:
             cv2.putText(frame, self.position, (25, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             cv2.imshow('frame', frame)
             
-            time.sleep(0.1)
+            # time.sleep(0.1)
             
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
