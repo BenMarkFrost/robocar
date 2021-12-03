@@ -34,7 +34,6 @@ while True:
     #if faceSize < 60000:
         #send("fwd",40)
     
-    time.sleep(0.1)
     
     # print(send("fwd"))
     

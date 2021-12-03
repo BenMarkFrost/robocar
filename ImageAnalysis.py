@@ -3,7 +3,6 @@ import numpy as np
 import threading
 import os
 import time
-from mtcnn.mtcnn import MTCNN
 
 class ImageAnalysis:
     
@@ -16,8 +15,11 @@ class ImageAnalysis:
         self.faceSize = 1000000000
 
         self.camera = cv2.VideoCapture(0)
+        self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+        self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+        
         self.face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-        self.detector = MTCNN()
+        #self.detector = MTCNN()
 
         self.thread = threading.Thread(target=self.start)
         self.thread.start()
@@ -53,12 +55,11 @@ class ImageAnalysis:
             gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
             
 
-            # faces = self.face_cascade.detectMultiScale(gray, 1.1, 4)
+            faces = self.face_cascade.detectMultiScale(gray, 1.1, 4)
 
-            faces = self.detector.detect_faces(frame)
+            #faces = self.detector.detect_faces(frame)
 
-
-            faces = [el['box'] for el in faces]
+            #faces = [el['box'] for el in faces]
 
 
             biggestFace = [0, (0,0), (0,0)]
