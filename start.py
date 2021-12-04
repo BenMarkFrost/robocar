@@ -27,8 +27,10 @@ def move(direction, moveTime):
         send("rgt", moveTime)
     elif direction == "left":
         send("lft", moveTime)
+    elif direction == "center":
+        send("fwd", moveTime)
     
-    time.sleep((moveTime)/1000)
+    #time.sleep((moveTime)/1000)
     
 
 while True:
@@ -55,14 +57,15 @@ while True:
     
         continue
     
-    distance = 0
+    distance = 60
+    minMove = 5
     if result == "right":
-        distance = mid_x - imageAnalysis.rightBound
+        distance = (mid_x - imageAnalysis.rightBound)
     elif result == "left":
-        distance = imageAnalysis.leftBound - mid_x
+        distance = (imageAnalysis.leftBound - mid_x)
     
     
-    moveTime = int((moveTime * distance/30))
+    moveTime = minMove + int((moveTime * distance/30))
     print(moveTime)
     
 

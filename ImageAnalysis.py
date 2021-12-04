@@ -6,13 +6,14 @@ import time
 from object_detector import ObjectDetector
 from object_detector import ObjectDetectorOptions
 import utils
+import sys
 
 class ImageAnalysis:
     
     def __init__(self):
         
-        os.system("libcamera-vid -t 1")
-        time.sleep(1)
+        #os.system("libcamera-vid -t 1")
+        #time.sleep(1)
         
         self.position = "none"
         self.mid_x = 0
@@ -92,6 +93,10 @@ class ImageAnalysis:
         
         
 
+    def findArea(self, bounding_box):
+        return (bounding_box[2] - bounding_box[0]) * (bounding_box[3] - bounding_box[1])
+
+
     def detectPeople(self, frame, leftBound, rightBound):
         detections = self.detector.detect(frame)
             
@@ -99,28 +104,42 @@ class ImageAnalysis:
         
         #print(detections)
         
+        self.maxPerson = None
+        
         for detection in detections:
             if detection.categories[0].label == "person":
                 #print("Found person")
                 #print(detection.bounding_box)
                 bounding_box = list(detection.bounding_box)
                 #print(bounding_box)
+                        
+                confidence = detection.categories[0].score
                 
+                if (not self.maxPerson) or (confidence > self.maxPerson[1]):
+                    self.maxPerson = [bounding_box, confidence]
+                    cv2.rectangle(frame, (bounding_box[0], bounding_box[1]), (bounding_box[2], bounding_box[3]), (0,255,0))
+        
+        
+        if self.maxPerson is None:
+            self.postion = "none"
+            return
+        
+        
+        bounding_box = self.maxPerson[0]
+        
+        self.mid_x = bounding_box[0] + ((bounding_box[2] - bounding_box[0])/2)
+        
+        
+        if leftBound > (self.mid_x):
+            #print("Left" + np.random.randint(0, 100).__str__())
+            self.position = "left"
+        elif rightBound < (self.mid_x):
+            #print("Right" + np.random.randint(0, 100).__str__())
+            self.position = "right"
+        else:
+            self.position = "center"
                 
-                self.mid_x = bounding_box[0] + ((bounding_box[2] - bounding_box[0])/2)
-                
-                
-                if leftBound > (self.mid_x):
-                    #print("Left" + np.random.randint(0, 100).__str__())
-                    self.position = "left"
-                elif rightBound < (self.mid_x):
-                    #print("Right" + np.random.randint(0, 100).__str__())
-                    self.position = "right"
-                else:
-                    self.position = "center"
-                
-                return
-        self.postion = "none"
+        
             
 
     def start(self):
@@ -132,7 +151,7 @@ class ImageAnalysis:
 
             # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-            
+            #frame = cv2.resize(frame, (640,480))
             
             
             self.leftBound = int(((frame.shape[1]/2) - frame.shape[1]/12.5))
@@ -148,7 +167,7 @@ class ImageAnalysis:
 
             cv2.putText(frame, self.position, (25, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             
-            outputFrame = cv2.resize(frame, (1920,1440))
+            outputFrame = cv2.resize(frame, (1440,1080))
             
             cv2.imshow('frame', outputFrame)
             
@@ -158,6 +177,7 @@ class ImageAnalysis:
                 break
         self.camera.release()
         cv2.destroyAllWindows()
+        sys.exit()
     
 
 
