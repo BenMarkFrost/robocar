@@ -32,9 +32,13 @@ class ImageAnalysis:
           enable_edgetpu=False)
         self.detector = ObjectDetector(model_path="efficientdet_lite0.tflite", options=options)
 
-        self.thread = threading.Thread(target=self.start)
-        self.thread.start()
-        # self.start()
+        # self.thread = threading.Thread(target=self.start)
+        # self.thread.start()
+        self.start()
+
+    # Crop the image on all sides by a given amount
+    def crop(self, image, amount):
+        return image[:, amount:-amount]
 
     def getPosition(self):
         pos = self.position
@@ -146,6 +150,8 @@ class ImageAnalysis:
         
         while True:
             ret, frame = self.camera.read()
+
+            #frame = self.crop(frame, 150)
 
             # frame = self.change_brightness(frame, value=100)
 
